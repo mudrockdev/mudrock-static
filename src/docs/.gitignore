@@ -1,2 +1,4 @@
 **/**
 !.gitignore
+!mudrock-static
+!mudrock-static/**
