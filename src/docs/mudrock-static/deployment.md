@@ -1,8 +1,8 @@
 ---
 title: Cloudflare Pages Deployment Guide
 description: Complete guide to deploy mudrock-static on Cloudflare Pages
-author: mudrock-static
-date: 2024-12-28
+author: mudrockdev
+date: 2025-06-06
 ---
 
 # Cloudflare Pages Deployment Guide
