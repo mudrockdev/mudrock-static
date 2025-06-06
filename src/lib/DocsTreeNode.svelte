@@ -16,7 +16,7 @@
 	const path = parentPath ? `${parentPath}/${node.name}` : node.name;
 
 	// Track open/closed state for folders (local to this component instance)
-	let open = $state(false);
+	let open = $state(true);
 
 	// Event dispatcher for file clicks
 

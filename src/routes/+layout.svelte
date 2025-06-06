@@ -10,35 +10,31 @@
 		import: 'default'
 	}) as Record<string, string>;
 
-	// Build tree structure from file paths
-	const tree = {
-		name: 'docs',
-		type: 'folder' as const,
-		children: Object.keys(markdownFiles).reduce((acc: Array<TreeNode>, path) => {
-			const relativePath = path.replace('/src/docs/', '');
-			const parts = relativePath.split('/');
-			let current = acc;
+	// Build tree structure from file paths - start with contents of docs folder
+	const treeChildren = Object.keys(markdownFiles).reduce((acc: Array<TreeNode>, path) => {
+		const relativePath = path.replace('/src/docs/', '');
+		const parts = relativePath.split('/');
+		let current = acc;
 
-			parts.forEach((part, index) => {
-				const isFile = index === parts.length - 1;
-				const existing = current.find((item) => item.name === part);
+		parts.forEach((part, index) => {
+			const isFile = index === parts.length - 1;
+			const existing = current.find((item) => item.name === part);
 
-				if (existing) {
-					current = existing.children ?? [];
-				} else {
-					const newItem: TreeNode = {
-						name: part,
-						type: isFile ? 'file' : 'folder',
-						...(isFile ? {} : { children: [] })
-					};
-					current.push(newItem);
-					current = isFile ? current : newItem.children || [];
-				}
-			});
+			if (existing) {
+				current = existing.children ?? [];
+			} else {
+				const newItem: TreeNode = {
+					name: part,
+					type: isFile ? 'file' : 'folder',
+					...(isFile ? {} : { children: [] })
+				};
+				current.push(newItem);
+				current = isFile ? current : newItem.children || [];
+			}
+		});
 
-			return acc;
-		}, [])
-	};
+		return acc;
+	}, []);
 
 	interface TreeNode {
 		name: string;
@@ -73,7 +69,9 @@
 	<!-- Sidebar -->
 	<aside class="w-56 border-r border-slate-700 py-4 overflow-y-auto bg-slate-800/50">
 		<nav class="px-2">
-			<DocsTree {tree} onfileclick={handleFileClick} />
+			{#each treeChildren as child (child.name)}
+				<DocsTree tree={child} onfileclick={handleFileClick} />
+			{/each}
 		</nav>
 	</aside>
 
