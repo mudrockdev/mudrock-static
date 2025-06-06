@@ -19,6 +19,7 @@
 	let loading = $state(false);
 	let error = $state(false);
 	let frontmatter: any = $state({});
+	let fileName = $derived(pathParam ? pathParam.split('/').pop()?.replace(/-/g, ' ') : '');
 
 	// Parse frontmatter from markdown content
 	function parseFrontmatter(markdown: string) {
@@ -136,7 +137,7 @@
 
 <svelte:head>
 	<title
-		>{frontmatter.title || (pathParam ? `${pathParam} - Documentation` : 'Documentation')}</title
+		>{frontmatter.title || fileName || (pathParam ? `${pathParam} - Documentation` : 'Documentation')}</title
 	>
 	{#if frontmatter.description}
 		<meta name="description" content={frontmatter.description} />
@@ -151,10 +152,10 @@
 		<p>Loading document...</p>
 	</div>
 {:else if MarkdownComponent}
-	{#if frontmatter.title || frontmatter.description || frontmatter.author || frontmatter.date}
+	{#if frontmatter.title || fileName || frontmatter.description || frontmatter.author || frontmatter.date}
 		<div class="mb-8 pb-6 border-b border-slate-700">
-			{#if frontmatter.title}
-				<h1 class="text-3xl font-bold text-slate-100 mb-2">{frontmatter.title}</h1>
+			{#if frontmatter.title || fileName}
+				<h1 class="text-3xl font-bold text-slate-100 mb-2">{frontmatter.title || fileName}</h1>
 			{/if}
 			{#if frontmatter.description}
 				<p class="text-lg text-slate-300 mb-4">{frontmatter.description}</p>
