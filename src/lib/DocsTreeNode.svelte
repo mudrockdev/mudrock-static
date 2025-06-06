@@ -6,12 +6,14 @@
 		node,
 		parentPath = '',
 		onfileclick,
-		level = 0
+		level = 0,
+		searchQuery = ''
 	}: {
 		node: TreeNode;
 		parentPath?: string;
 		onfileclick?: (event: FileClickEvent) => void;
 		level?: number;
+		searchQuery?: string;
 	} = $props();
 
 	// Compute the full path for this node
@@ -35,6 +37,11 @@
 				handleFileClick();
 			}
 		}
+	}
+
+	function shouldHighlight(text: string, query: string): boolean {
+		if (!query.trim()) return false;
+		return text.toLowerCase().includes(query.toLowerCase());
 	}
 </script>
 
@@ -69,12 +76,23 @@
 			>
 				<path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
 			</svg>
-			<span class="text-slate-200 group-hover:text-white font-medium truncate">{node.name}</span>
+			<span
+				class="text-slate-200 group-hover:text-white font-medium truncate"
+				class:highlight={shouldHighlight(node.name, searchQuery)}
+			>
+				{node.name}
+			</span>
 		</button>
 		{#if open && node.children}
 			<div class="mt-0.5">
 				{#each node.children as child (child.name)}
-					<DocsTreeNode node={child} parentPath={path} {onfileclick} level={level + 1} />
+					<DocsTreeNode
+						node={child}
+						parentPath={path}
+						{onfileclick}
+						level={level + 1}
+						{searchQuery}
+					/>
 				{/each}
 			</div>
 		{/if}
@@ -101,9 +119,12 @@
 					clip-rule="evenodd"
 				/>
 			</svg>
-			<span class="text-slate-300 group-hover:text-white truncate"
-				>{node.name.replace('.md', '')}</span
+			<span
+				class="text-slate-300 group-hover:text-white truncate"
+				class:highlight={shouldHighlight(node.name.replace('.md', ''), searchQuery)}
 			>
+				{node.name.replace('.md', '')}
+			</span>
 			<svg
 				class="w-3 h-3 ml-auto text-slate-600 group-hover:text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity duration-150 shrink-0"
 				fill="currentColor"

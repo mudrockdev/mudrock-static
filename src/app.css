@@ -53,3 +53,7 @@ body {
 .prose-invert a:hover {
 	color: rgb(147 197 253);
 }
+
+.highlight {
+	@apply bg-yellow-400/30 text-yellow-200 rounded px-1;
+}

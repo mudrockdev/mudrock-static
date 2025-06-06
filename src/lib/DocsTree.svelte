@@ -5,8 +5,14 @@
 	let {
 		tree,
 		onfileclick,
-		level = 0
-	}: { tree: TreeNode; onfileclick?: (event: FileClickEvent) => void; level?: number } = $props();
+		level = 0,
+		searchQuery = ''
+	}: {
+		tree: TreeNode;
+		onfileclick?: (event: FileClickEvent) => void;
+		level?: number;
+		searchQuery?: string;
+	} = $props();
 
 	function handleFileClick(event: FileClickEvent) {
 		onfileclick?.(event);
@@ -14,5 +20,5 @@
 </script>
 
 {#if tree}
-	<DocsTreeNode node={tree} parentPath="" onfileclick={handleFileClick} {level} />
+	<DocsTreeNode node={tree} parentPath="" onfileclick={handleFileClick} {level} {searchQuery} />
 {/if}
