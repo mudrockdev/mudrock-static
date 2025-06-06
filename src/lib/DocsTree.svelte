@@ -1,15 +1,11 @@
 <script lang="ts">
-	interface TreeNode {
-		name: string;
-		type: "folder" | "file";
-		children?: TreeNode[];
-	}
-
 	import DocsTreeNode from './DocsTreeNode.svelte';
+	import type { TreeNode, FileClickEvent } from './types.js';
 
-	let { tree, onfileclick }: { tree: TreeNode; onfileclick?: (event: { path: string }) => void } = $props();
+	let { tree, onfileclick }: { tree: TreeNode; onfileclick?: (event: FileClickEvent) => void } =
+		$props();
 
-	function handleFileClick(event: { path: string }) {
+	function handleFileClick(event: FileClickEvent) {
 		onfileclick?.(event);
 	}
 </script>

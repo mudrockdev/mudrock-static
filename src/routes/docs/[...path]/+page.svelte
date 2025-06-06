@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { untrack } from 'svelte';
+	import type { Frontmatter, MarkdownModule } from '$lib/types.js';
 
 	// Import all markdown files as mdsvex components
 	const markdownFiles = import.meta.glob('/src/docs/**/*.md');
@@ -15,21 +16,21 @@
 	// Get current path and find corresponding markdown file
 	let pathParam = $derived($page.params.path);
 
-	let MarkdownComponent: any = $state(null);
+	let MarkdownComponent: ConstructorOfATypedSvelteComponent | null = $state(null);
 	let loading = $state(false);
 	let error = $state(false);
-	let frontmatter: any = $state({});
+	let frontmatter: Frontmatter = $state({});
 	let fileName = $derived(pathParam ? pathParam.split('/').pop()?.replace(/-/g, ' ') : '');
 
 	// Parse frontmatter from markdown content
-	function parseFrontmatter(markdown: string) {
+	function parseFrontmatter(markdown: string): Frontmatter {
 		const frontmatterRegex = /^---\n([\s\S]*?)\n---/;
 		const match = markdown.match(frontmatterRegex);
 
 		if (!match) return {};
 
 		const yamlContent = match[1];
-		const parsed: any = {};
+		const parsed: Frontmatter = {};
 
 		// Simple YAML parser for basic key-value pairs
 		yamlContent.split('\n').forEach((line) => {
@@ -55,7 +56,7 @@
 
 		if (matchingPath && markdownFiles[matchingPath]) {
 			try {
-				const module = await markdownFiles[matchingPath]();
+				const module = (await markdownFiles[matchingPath]()) as MarkdownModule;
 				MarkdownComponent = module.default;
 
 				// Parse frontmatter from raw content
@@ -137,7 +138,9 @@
 
 <svelte:head>
 	<title
-		>{frontmatter.title || fileName || (pathParam ? `${pathParam} - Documentation` : 'Documentation')}</title
+		>{frontmatter.title ||
+			fileName ||
+			(pathParam ? `${pathParam} - Documentation` : 'Documentation')}</title
 	>
 	{#if frontmatter.description}
 		<meta name="description" content={frontmatter.description} />
