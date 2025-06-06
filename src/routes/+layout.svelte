@@ -67,10 +67,17 @@
 
 <div class="flex min-h-screen bg-slate-900">
 	<!-- Sidebar -->
-	<aside class="w-56 border-r border-slate-700 py-4 overflow-y-auto bg-slate-800/50">
-		<nav class="px-2">
+	<aside
+		class="w-64 border-r border-slate-700/60 py-6 overflow-y-auto bg-slate-900/80 backdrop-blur-sm"
+	>
+		<nav class="px-3">
+			<div class="mb-4">
+				<h2 class="text-xs uppercase tracking-wider text-slate-400 font-semibold px-2">
+					Documentation
+				</h2>
+			</div>
 			{#each treeChildren as child (child.name)}
-				<DocsTree tree={child} onfileclick={handleFileClick} />
+				<DocsTree tree={child} onfileclick={handleFileClick} level={0} />
 			{/each}
 		</nav>
 	</aside>
