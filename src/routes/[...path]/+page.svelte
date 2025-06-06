@@ -181,7 +181,7 @@
 	<div class="text-center text-slate-400 mt-20">
 		<h1 class="text-2xl font-bold text-slate-100 mb-4">Document not found</h1>
 		<p>The document "{pathParam}" could not be found.</p>
-		<a href="/docs" class="text-blue-400 hover:text-blue-300 mt-4 inline-block">
+		<a href="/" class="text-blue-400 hover:text-blue-300 mt-4 inline-block">
 			← Back to documentation
 		</a>
 	</div>
